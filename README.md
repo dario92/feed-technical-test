@@ -8,9 +8,9 @@ FEED TECHNICAL TEST
  * [Code Linting](#eslint)
 
 ## 🖥 <a name="installing">  Installing</a>
-* Clone the repo and cd project folder: ```git clone https://github.com/dario92/feed-technical-test.git```
-* Move in the project folder: ```cd feed-technical-test```
-* Install all needed packages: ```npm install```
+* Clone the repo: ```git clone https://github.com/dario92/feed-technical-test.git```
+* cd in project folder: ```cd feed-technical-test```
+* Install all dependencies: ```npm install```
 
 
 ## 🚀 <a name="launching">Launching</a>
