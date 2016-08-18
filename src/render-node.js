@@ -1,10 +1,9 @@
 import phantom from 'phantom';
+import { phantomSuccessStatus } from './config';
 import {
   get as getCacheItem,
   set as setCacheItem,
 } from './cache';
-
-const SUCCESS_STATUS = 'success';
 
 /**
  * @name isCacheUpdated
@@ -39,7 +38,9 @@ function isCacheUpdated(item) {
 
 function evaluateClipRectOptions(s, i = 0) {
   let obj;
-  let el = document.querySelectorAll(s)[i];
+  let el = document.querySelectorAll(s)[i || 0];
+
+  // console.log('document.querySelectorAll(s)', i);
 
   if (el) {
     const rect = el.getBoundingClientRect();
@@ -52,6 +53,20 @@ function evaluateClipRectOptions(s, i = 0) {
     };
   }
   return obj;
+}
+
+function phantonLoadPage(url) {
+  return new Promise(async (resolve, reject) => {
+    try {
+      const ph = await phantom.create();
+      const page = await ph.createPage();
+      const status = await page.open(url);
+
+      resolve({ ph, page, status });
+    } catch (err) {
+      reject(err);
+    }
+  });
 }
 
 /**
@@ -70,15 +85,15 @@ export default ({ url, selector, index }) => {
       // Use cache if set and if not too old
       if (item && item.value && isCacheUpdated(item)) {
         strBase64 = item.value;
-      } else {
-        const ph = await phantom.create();
-        const page = await ph.createPage();
-        const status = await page.open(url);
+      } else if (url && selector) {
+        const { ph, page, status } = await phantonLoadPage(url);
 
         // If a network error happens while loading the requested url the throw and error
-        if (status !== SUCCESS_STATUS) {
+        if (status !== phantomSuccessStatus) {
           throw new Error('Unable to load the page');
         }
+
+        // page.on('onConsoleMessage', msg => console.log(msg));
 
         const clipRectOptions = await page.evaluate(evaluateClipRectOptions, selector, index);
 
@@ -94,6 +109,8 @@ export default ({ url, selector, index }) => {
 
         // Insert/update cache
         setCacheItem(index, strBase64);
+      } else {
+        throw new Error('Invalid parameters');
       }
 
       resolve(strBase64);

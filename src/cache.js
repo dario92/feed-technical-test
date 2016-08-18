@@ -1,8 +1,11 @@
 import lowdb from 'lowdb';
-import { join } from 'path';
+import { dbPath } from './cache';
 
-const dbPath = join(process.cwd(), './db.local.json');
 const db = lowdb(dbPath);
+
+function isValidId(id) {
+  return !isNaN(parseInt(id, 10));
+}
 
 /**
  * @name get
@@ -18,10 +21,14 @@ const db = lowdb(dbPath);
  * }
  */
 export function get(id) {
-  const item = db.get('cache').find({ id }).value();
+  let item;
 
-  if (item && item.date) {
-    item.date = new Date(item.date);
+  if (isValidId(id)) {
+    item = db.get('cache').find({ id }).value();
+
+    if (item && item.date) {
+      item.date = new Date(item.date);
+    }
   }
 
   return item;
@@ -32,10 +39,18 @@ export function get(id) {
  * @desc Insert/update and element in the cache. The date field of the item will be updated.
  * @param {String} id - Id of item
  * @param {Mixed} value - New value
- * @return {void}
+ * @return {Boolean}
  */
 export function set(id, value) {
-  const data = { id, value, date: new Date() };
-  const cache = db.get('cache').value() || [];
-  db.set('cache', [data, ...(cache.filter((item) => item.id !== id))]).value();
+  let success = false;
+
+  if (isValidId(id)) {
+    const data = { id, value, date: new Date() };
+    const cache = db.get('cache').value() || [];
+    db.set('cache', [data, ...(cache.filter((item) => item.id !== id))]).value();
+
+    success = true;
+  }
+
+  return success;
 }

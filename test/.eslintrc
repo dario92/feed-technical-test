@@ -1,0 +1,8 @@
+{
+  "rules": {
+    "no-underscore-dangle": 0
+  },
+  "env": {
+    "mocha": true
+  }
+}
