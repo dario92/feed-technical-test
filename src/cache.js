@@ -1,5 +1,5 @@
 import lowdb from 'lowdb';
-import { dbPath } from './cache';
+import { dbPath } from './config';
 
 const db = lowdb(dbPath);
 

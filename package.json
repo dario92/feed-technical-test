@@ -6,7 +6,7 @@
   "scripts": {
     "start": "./node_modules/.bin/babel-node start.js",
     "lint": "./node_modules/.bin/eslint start.js webpack.config.js src test",
-    "test": "mocha --compilers js:babel-core/register --reporter nyan"
+    "test": "./node_modules/.bin/mocha --compilers js:babel-core/register --reporter nyan"
   },
   "keywords": [
     "node.js",

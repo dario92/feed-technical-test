@@ -55,6 +55,17 @@ function evaluateClipRectOptions(s, i = 0) {
   return obj;
 }
 
+/**
+ * @name phantonLoadPage
+ * @desc Create browser window at given location
+ * @param {String} url - URL of the location that needs to be opened
+ * @return {Promise} - The promise is resolved with an object and with the following structure:
+ * {
+ *  ph: phantom instance
+ *  page: page instace
+ *  status: page loading status, can be "error" or "success"
+ * }
+ */
 function phantonLoadPage(url) {
   return new Promise(async (resolve, reject) => {
     try {
