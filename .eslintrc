@@ -3,5 +3,8 @@
   "extends": "airbnb-base/legacy",
   "rules": {
     comma-dangle: ["error", "always-multiline"]
+  },
+  "env": {
+    "es6": true
   }
 }

@@ -1,5 +1,6 @@
 import { join } from 'path';
 import webpack from 'webpack';
+import nodeExternals from 'webpack-node-externals';
 
 module.exports = {
   entry: join(__dirname, 'src/server.js'),
@@ -11,8 +12,8 @@ module.exports = {
     loaders: [
       {
         test: /\.js$/,
-        exclude: /node_modules/,
-        loader: 'babel-loader',
+        exclude: /(node_modules|bower_components)/,
+        loader: 'babel',
       },
     ],
   },
@@ -20,4 +21,6 @@ module.exports = {
     new webpack.optimize.DedupePlugin(),
     new webpack.optimize.UglifyJsPlugin({ compress: { warnings: false } }),
   ],
+  target: 'node',
+  externals: [nodeExternals()],
 };

@@ -12,7 +12,7 @@ function runServer() {
     server.kill('SIGTERM');
   }
 
-  server = spawn('node', [serverPath]);
+  server = spawn('node', [serverPath], { cwd: webpackConfig.output.path });
 
   server.stderr.on('data', data => process.stderr.write(data));
   server.stdout.on('data', data => process.stdout.write(data));
